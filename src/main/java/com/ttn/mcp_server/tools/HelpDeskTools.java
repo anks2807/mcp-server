@@ -25,8 +25,7 @@ public class HelpDeskTools {
 
     @Tool(name = "create_help_desk_ticket", description = "Create a help desk ticket for a user")
     public String createTicket(@ToolParam(description = "Details to create a help desk ticket") String summary,
-                               ToolContext toolContext) {
-        String username = (String)toolContext.getContext().get("username");
+                               @ToolParam(description = "username") String username) {
         username = username != null ? username : "Anonymous";
         HelpDeskTicket helpDeskTicket = HelpDeskTicket.builder()
                 .createdAt(LocalDateTime.now())
@@ -40,8 +39,7 @@ public class HelpDeskTools {
     }
 
     @Tool(name = "fetch_tickets_by_users", description = "Fetch the status of the tickets based on a given username")
-    List<HelpDeskTicket> getTicketStatus(ToolContext toolContext) {
-        String username = (String) toolContext.getContext().get("username");
+    List<HelpDeskTicket> getTicketStatus(@ToolParam(description = "username") String username) {
         username = username != null ? username : "Anonymous";
         log.info("Fetching tickets for user: {}", username);
         List<HelpDeskTicket> tickets =  helpDeskRepository.findAllByStatusAndUsername(List.of("OPEN", "IN_PROGRESS"), username);
